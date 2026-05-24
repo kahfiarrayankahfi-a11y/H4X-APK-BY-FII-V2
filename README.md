@@ -160,7 +160,7 @@
             min-height: 100vh;
             display: flex;
             align-items: center;
-            justify-content: space-between;
+            justify-content: center;
             padding: 150px 8% 80px 8%;
             gap: 50px;
         }
@@ -282,53 +282,6 @@
             color: var(--primary-color);
             transform: scale(1.15);
         }
-
-        /* HERO IMAGE / MOCKUP */
-        .hero-image {
-            flex: 1;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .phone-mockup {
-            width: 270px;
-            height: 520px;
-            border: 8px solid #161616;
-            border-radius: 32px;
-            background-color: #000;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.7);
-            padding: 8px;
-            position: relative;
-        }
-
-        .phone-screen {
-            width: 100%;
-            height: 100%;
-            border-radius: 22px;
-            background: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.6)), url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1000') no-repeat center center;
-            background-size: cover;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .badge {
-            position: absolute;
-            background: rgba(18, 18, 18, 0.8);
-            backdrop-filter: blur(6px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 10px;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-
-        .badge i { color: var(--primary-color); }
-        .badge-top { top: 20%; left: -20px; }
-        .badge-bottom { bottom: 20%; right: -20px; }
 
         /* FEATURES SECTION (MULTI-PAGE DASHBOARD DESIGN) */
         .features-section {
@@ -540,7 +493,7 @@
             font-size: 11px;
             color: #4a4a4a;
             max-height: 85px;
-            overflow-y: hidden;
+            overflow-y: auto;
             margin-top: 20px;
             text-align: left;
         }
@@ -756,14 +709,12 @@
             .navbar { padding: 20px 5%; }
             .nav-links { display: none; }
             .hero {
-                flex-direction: column-reverse;
+                flex-direction: column;
                 text-align: center;
                 padding-top: 130px;
             }
             .hero-content h1, .description { text-align: center; }
             .stats-container, .cta-buttons, .social-icons { justify-content: center; }
-            .badge-top { left: 10px; top: 15%; }
-            .badge-bottom { right: 10px; bottom: 15%; }
             .contact-container { flex-direction: column; gap: 40px; }
             .skills-grid { grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); }
             
@@ -840,15 +791,6 @@
                     <a href="https://sociabuzz.com/kapi_tayerdd" target="_blank" title="SociaBuzz"><i class="fas fa-link"></i></a> 
                     <a href="https://instagram.com/kapiniceguyyy" target="_blank" title="Instagram"><i class="fab fa-instagram"></i></a> 
                     <a href="https://wa.me/6285715933441" target="_blank" title="WhatsApp"><i class="fab fa-whatsapp"></i></a> 
-                </div>
-            </div>
-
-            <div class="hero-image">
-                <div class="phone-mockup">
-                    <div class="phone-screen">
-                        <div class="badge badge-top"><i class="fas fa-mobile-alt"></i> Responsive</div>
-                        <div class="badge badge-bottom"><i class="fas fa-code"></i> Clean code</div>
-                    </div>
                 </div>
             </div>
         </section>
@@ -1030,7 +972,7 @@
     </div>
 
     <script>
-        // 1. LOGIN GATE LOGIC (PERBAIKAN TOTAL: MENGGUNAKAN KLIK NATIVE TANPA REFRESH FORM)
+        // 1. LOGIN GATE LOGIC
         function handleLogin() {
             const userBox = document.getElementById('usernameInput').value;
             const passBox = document.getElementById('passwordInput').value;
@@ -1038,7 +980,6 @@
             const loginGate = document.getElementById('loginGate');
             const mainContent = document.getElementById('mainContent');
 
-            // Kredensial login kamu
             if (userBox === "FII" && passBox === "123") {
                 errorMsg.style.display = "none";
                 loginGate.style.opacity = "0";
@@ -1097,7 +1038,7 @@
             alert('Semua fitur di setiap halaman berhasil di-reset ke OFF!');
         }
 
-        // 5. FITUR LAUNCH GAME NATIVE INTENT
+        // 5. FITUR LAUNCH GAME NATIVE INTENT (IMPROVED)
         function launchFreeFire(isChecked) {
             const consoleBox = document.getElementById('consoleBox');
             if(isChecked) {
@@ -1105,15 +1046,44 @@
                 consoleBox.scrollTop = consoleBox.scrollHeight;
 
                 setTimeout(() => {
-                    alert('Menghubungkan ke game... Klik OK untuk meluncurkan Free Fire.');
-                    window.location.href = "intent://#Intent;package=com.dts.freefireth;end";
+                    consoleBox.innerHTML += `<br><span style="color: #00ff66;">$ [SUCCESS] Intent launched successfully!</span><br>$ Free Fire should open in 3 seconds...`;
+                    consoleBox.scrollTop = consoleBox.scrollHeight;
+                    
+                    // Multiple launch methods for Android compatibility
+                    launchAppMultipleMethods();
                 }, 800);
             } else {
                 consoleBox.innerHTML += `<br>$ Launch sequence aborted.`;
                 consoleBox.scrollTop = consoleBox.scrollHeight;
             }
         }
-    </script>
 
+        // Multi-method app launcher for better compatibility
+        function launchAppMultipleMethods() {
+            // Method 1: Standard Android Intent URI
+            window.location.href = "intent://com.dts.freefireth#Intent;package=com.dts.freefireth;scheme=package;action=android.intent.action.VIEW;end";
+            
+            // Method 2: Fallback after short delay
+            setTimeout(() => {
+                // Try direct package URL scheme
+                window.location.href = "com.dts.freefireth://";
+            }, 500);
+
+            // Method 3: Market link fallback
+            setTimeout(() => {
+                window.location.href = "market://details?id=com.dts.freefireth";
+            }, 1500);
+        }
+
+        // Allow enter key to login
+        document.addEventListener('keypress', function(event) {
+            if(event.key === 'Enter') {
+                const loginGate = document.getElementById('loginGate');
+                if(loginGate && loginGate.style.display !== 'none') {
+                    handleLogin();
+                }
+            }
+        });
+    </script>
 </body>
 </html>
